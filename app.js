@@ -1,4 +1,24 @@
 //
+// CONSTANT
+//
+
+const PLAYER_1 = 'player_1'
+const PLAYER_2 = 'player_2'
+
+//
+// STATE
+//
+
+let p1_won = 0;
+let p2_won = 0;
+
+//
+// FLOW
+//
+
+// TODO
+
+//
 // UI
 //
 
@@ -82,7 +102,6 @@ function mark(ans, num) {
 function rand_num () { // 4 digits
   return Math.floor(1000 + Math.random() * 9000);
 }
-
 let rows = 10;
 let answers = [
   rand_num(),
