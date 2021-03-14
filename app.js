@@ -1,44 +1,96 @@
-const PLAYER_INFO = {
-  1: {
-    title: "ผู้เล่นฝ่ายแดง",
-    color_clz: "danger",
+//
+// UI
+//
+
+function render_table(answers, numbers) {
+  // circuit break
+  if(numbers[0].length == 0) {
+    $('.stadium').hide();
+    return;
   }
-  2: {
-    title: "ผู้เล่นฝ่ายน้ำเงิน",
-    color_clz: "info",
-  }
+  let [a1, a2] = answers;
+  // loading
+  let loading = `<tr><td colspan='4'>Loading...</td></tr>`;
+  $('table tbody').html(loading);
+  // build html
+  let html = '';
+  numbers[0].forEach((n1, idx) => {
+    let n2 = numbers[1][idx] || '';
+    html += `
+      <tr>
+        <td>${n1}</td>
+        <td>${mark(a1, n1)}</td>
+        <td>${n2}</td>
+        <td>${mark(a2, n2)}</td>
+      </tr>
+    `;
+  });
+  // render table
+  $('table tbody').html(html);
 }
 
-function render_player_table(no) {
-  /*
-  <table class='table table-danger table-striped'>
-    <thead>
-      <tr class='text-center'>
-        <th colspan='3'>ผู้เล่นคนที่ 1</th>
-      </tr>
-      <tr>
-        <th>ตัวเลข</th>
-        <th>ถูก</th>
-        <th>ตรง</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>****</td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>****</td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>x</td>
-        <td></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  */
+//
+// ALGORITHM
+//
+
+function mark(ans, num) {
+  if (!num) return '';
+
+  // prepare data
+  let pad_ans = String(ans).padStart(4, '0');
+  let pad_num = String(num).padStart(4, '0');
+  let left_ans = [];
+  let left_num = [];
+
+  // find match
+  let count_match = 0;
+  for (let i=0; i<pad_ans.length; i++) {
+    let a = pad_ans[i];
+    let n = pad_num[i];
+    if (a == n) {
+      count_match += 1;
+    }
+    else {
+      left_ans.push(a);
+      left_num.push(n);
+    }
+  }
+
+  // find found
+  let count_found = 0;
+  left_num.forEach(n => {
+    let idx = left_ans.indexOf(n);
+    if (idx > -1) {
+      count_found += 1;
+      left_ans.splice(idx, 1);
+    }
+  });
+
+  // else dash
+  let count_else = 4 - count_match - count_found;
+
+  // return
+  return 'O'.repeat(count_match)
+          + 'X'.repeat(count_found)
+          + '-'.repeat(count_else);
 }
+
+//
+// DEV
+//
+
+function rand_num () { // 4 digits
+  return Math.floor(1000 + Math.random() * 9000);
+}
+
+let rows = 10;
+let answers = [
+  rand_num(),
+  rand_num(),
+];
+let numbers = [
+  [...Array(rows)].map(r => rand_num()),
+  [...Array(rows)].map(r => rand_num()),
+];
+render_table(answers, numbers);
+$('h1').html(answers.join(","));
