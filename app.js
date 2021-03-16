@@ -30,16 +30,28 @@ let next_turn = PLAYER_1;
 
 function engine() {
   // enter answers
-  while (!p1_ans.match(PATT_INPUT)) { p1_ans = prompt("*** SECRET ***\nEnter Player 1 number (4 digits)") || ""; }
-  while (!p2_ans.match(PATT_INPUT)) { p2_ans = prompt("*** SECRET ***\nEnter Player 2 number (4 digits)") || ""; }
+  while (!p1_ans.match(PATT_INPUT)) {
+    p1_ans = prompt("*** SECRET ***\nEnter Player 1 number (4 digits)") || "";
+    if (p1_ans == "") return;
+  }
+  while (!p2_ans.match(PATT_INPUT)) {
+    p2_ans = prompt("*** SECRET ***\nEnter Player 2 number (4 digits)") || "";
+    if (p2_ans == "") return;
+  }
 
   // guess number
   if (next_turn == PLAYER_1) {
-    while (!input_num.match(PATT_INPUT)) { input_num = prompt("TURN: Player 1\nWhat is Player 2 number ?") || ""; }
+    while (!input_num.match(PATT_INPUT)) {
+      input_num = prompt("TURN: Player 1\nWhat is Player 2 number ?") || "";
+      if (input_num == "") return;
+    }
     p1_num.unshift(input_num);
   }
   else { // PLAYER_2
-    while (!input_num.match(PATT_INPUT)) { input_num = prompt("TURN: Player 2\nWhat is Player 1 number ?") || ""; }
+    while (!input_num.match(PATT_INPUT)) {
+      input_num = prompt("TURN: Player 2\nWhat is Player 1 number ?") || "";
+      if (input_num == "") return;
+    }
     p2_num.unshift(input_num);
   }
 
