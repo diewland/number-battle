@@ -17,8 +17,8 @@ const HINT_NONE = "-"; //"<img height='24' src='./img/heart_blank.png'> ";
 
 let p1_won = 0;
 let p2_won = 0;
-let p1_ans = "1234"; // TODO
-let p2_ans = "5678"; // TODO
+let p1_ans = "";
+let p2_ans = "";
 let p1_num = [];
 let p2_num = [];
 let input_num = "";
