@@ -29,27 +29,37 @@ let next_turn = PLAYER_1;
 //
 
 function engine() {
-  // enter answers
-  while (!p1_ans.match(PATT_INPUT)) {
-    p1_ans = prompt("*** SECRET ***\nEnter Player 1 number (4 digits)") || "";
-    if (p1_ans == "") return;
-  }
-  while (!p2_ans.match(PATT_INPUT)) {
-    p2_ans = prompt("*** SECRET ***\nEnter Player 2 number (4 digits)") || "";
-    if (p2_ans == "") return;
+  // prepare player label
+  let player_label = next_turn ? "Player 1" : "Player 2";
+
+  // setup player answers
+  if ((p1_ans == "") || (p2_ans == "")) {
+    // player 1 answer
+    while (!p1_ans.match(PATT_INPUT)) {
+      p1_ans = prompt("*** SECRET ***\nEnter Player 1 number (4 digits)") || "";
+      if (p1_ans == "") return;
+    }
+    // player 2 answer
+    while (!p2_ans.match(PATT_INPUT)) {
+      p2_ans = prompt("*** SECRET ***\nEnter Player 2 number (4 digits)") || "";
+      if (p2_ans == "") return;
+    }
+    // update play button text and break
+    $('.btn-play').text(player_label);
+    return;
   }
 
-  // guess number
-  if (next_turn == PLAYER_1) {
+  // turn by turn, guess number
+  if (next_turn) { // PLAYER 1
     while (!input_num.match(PATT_INPUT)) {
-      input_num = prompt("TURN: Player 1\nWhat is Player 2 number ?") || "";
+      input_num = prompt("What is Player 2 number ?") || "";
       if (input_num == "") return;
     }
     p1_num.unshift(input_num);
   }
-  else { // PLAYER_2
+  else { // PLAYER 2
     while (!input_num.match(PATT_INPUT)) {
-      input_num = prompt("TURN: Player 2\nWhat is Player 1 number ?") || "";
+      input_num = prompt("What is Player 1 number ?") || "";
       if (input_num == "") return;
     }
     p2_num.unshift(input_num);
@@ -62,13 +72,16 @@ function engine() {
   if (gameover) {
     // game over
     $('.btn-play').hide();
-    let player_label = next_turn ? "Player 1" : "Player 2";
     alert(`🎉🎉🎉 ${player_label} WIN 🎉🎉🎉`);
   }
   else {
     // switch player
     input_num = "";
     next_turn = !next_turn;
+
+    // update play button text
+    let player_label = next_turn ? "Player 1" : "Player 2";
+    $('.btn-play').text(player_label);
   }
 }
 
