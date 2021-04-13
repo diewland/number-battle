@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Number Battle</title>
+  </head>
+  <body>
+
+    <!-- top -->
+    <div class='fixed-top p-3 bg-white container'>
+      <div class='row'>
+        <div class='col'>Player 1</div>
+        <div class='col text-end'>Room 1</div>
+      </div>
+    </div>
+
+    <!-- middle -->
+    <div class='record container' style='margin-top: 60px; margin-bottom: 90px;'></div>
+
+    <!-- bottom -->
+    <div class='fixed-bottom bg-white p-3 container'>
+      <div class='row'>
+        <div class='col-7'>
+          <input type="number" class="nes-input" placeholder="Input" maxlength="4" />
+        </div>
+        <div class='col-5'>
+          <button type="button" class="nes-btn is-primary w-100">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCRIPT: bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+
+    <!-- SCRIPT: nes.css -->
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+    <link href="https://unpkg.com/nes.css/css/nes.css" rel="stylesheet" />
+
+    <!-- SCRIPT: jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+
+    <!-- SCRIPT: app -->
+    <!-- TODO ...
+    <link href="./app.css" rel="stylesheet" />
+    <script src="./app.js"></script>
+    -->
+    <script>
+      for(let i=1; i<=40; i++) {
+        $('.record.container').prepend(`
+          <div class='row'><div class='col'>#${i}</div><div class='col'>1234</div><div class='col'>OOXX</div></div>
+        `);
+      }
+      $('.record.container').prepend(`<div class='text-success'>Player 2 win!</div>`);
+    </script>
+
+  </body>
+</html>
