@@ -11,7 +11,7 @@ function now() {
 function get_default_data() {
   return {
     online: 0,
-    finish: false,
+    //finish: false,
     answer: [null, null],
     number: [[], []],
     ts: now(),

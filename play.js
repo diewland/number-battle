@@ -57,35 +57,23 @@ function handle_send(evt) {
   // remove value from input
   $input.val('');
 
-  // submit number
-  let answer = get_player_answer();
   // input player answer
+  let answer = get_player_answer();
   if (!answer) {
     set_info_msg(MSG_ANS_ADDED);
     set_player_answer(num, _ => sync_room_data(polling));
-    friend_turn();
   }
   // guess friend number
   else {
-    // TODO
+    let turn = get_player_number().length;
+    let hint = 'OOOO'; // TODO
+    add_log_msg(turn+1, num, hint);
+    set_player_number(num);
+    sync_room_data(polling);
   }
-}
-function your_turn() {
-  $('.btn-send').show();
-  $('.btn-wait').hide();
-  $('.btn-exit').hide();
-  //
-  $('.input-num').focus();
-}
-function friend_turn() {
-  $('.btn-send').hide();
-  $('.btn-wait').show();
-  $('.btn-exit').hide();
-}
-function game_over() {
-  $('.btn-send').hide();
-  $('.btn-wait').hide();
-  $('.btn-exit').show();
+
+  // switch to friend turn
+  friend_turn();
 }
 
 // api
@@ -114,6 +102,12 @@ function get_player_answer() {
 }
 function get_friend_answer() {
   return room_data.answer[{ 1: 1, 2: 0 }[player_no]];
+}
+function set_player_number(num) {
+  return room_data.number[player_no-1].push(num);
+}
+function get_player_number() {
+  return room_data.number[player_no-1];
 }
 
 // gameplay
@@ -151,17 +145,58 @@ function join_room() {
 }
 function polling() {
   fetch_room_data(_ => {
-    // ready to play
+    // both players enter their number
     let ready2play = room_data.answer.every(r => !!r);
     if (!ready2play) {
       setTimeout(polling, POLLING_SEC);
     }
+    // ready to play
     else {
-      // ready to play
-      // TODO whose turn ?
-      // TODO game end ?
+      // game over
+      if (is_game_over()) {
+        // TODO show game over ui
+      }
+      // your turn
+      else if (is_your_turn()) {
+        your_turn();
+      }
+      // friend turn -> polling
+      else {
+        setTimeout(polling, POLLING_SEC);
+      }
     }
   });
+}
+function your_turn() {
+  $('.btn-send').show();
+  $('.btn-wait').hide();
+  $('.btn-exit').hide();
+  //
+  $('.input-num').focus();
+}
+function friend_turn() {
+  $('.btn-send').hide();
+  $('.btn-wait').show();
+  $('.btn-exit').hide();
+}
+function game_over() {
+  $('.btn-send').hide();
+  $('.btn-wait').hide();
+  $('.btn-exit').show();
+}
+function is_your_turn() {
+  let p1_size = room_data.number[0].length;
+  let p2_size = room_data.number[1].length;
+  if (player_no == 1) {
+    return p1_size == p2_size;
+  }
+  else if (player_no == 2) {
+    return p1_size > p2_size;
+  }
+  return false;
+}
+function is_game_over() {
+  return false; // TODO
 }
 
 // message
