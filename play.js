@@ -73,10 +73,19 @@ function handle_send(evt) {
 function your_turn() {
   $('.btn-send').show();
   $('.btn-wait').hide();
+  $('.btn-exit').hide();
+  //
+  $('.input-num').focus();
 }
 function friend_turn() {
   $('.btn-send').hide();
   $('.btn-wait').show();
+  $('.btn-exit').hide();
+}
+function game_over() {
+  $('.btn-send').hide();
+  $('.btn-wait').hide();
+  $('.btn-exit').show();
 }
 
 // api
@@ -131,7 +140,6 @@ function join_room() {
     let answer = get_player_answer();
     if (!answer) {
       set_info_msg(MSG_ENTER_ANS);
-      $('.input-num').focus();
       your_turn();
     }
     else {
