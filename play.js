@@ -34,7 +34,7 @@ $('.record.container').prepend(`<div class='text-success'>Player 2 win!</div>`);
 function join_room(api) {
   $.ajax(api).done(resp => {
     // update room data
-    room_data = resp.data || DEFAULT_DATA;
+    room_data = resp.data || get_default_data();
 
     // update online player
     room_data.online += 1;
@@ -47,6 +47,7 @@ function join_room(api) {
     }
 
     // sync db
+    room_data.ts = now();
     ajax_post(api, room_data);
 
     // update ui
