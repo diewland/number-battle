@@ -10,17 +10,21 @@
 
     <div class='container mt-5'>
 
+      <!-- logo -->
       <h1 class='text-center'>
-        Number<br>Battle
+        Number<br>
+        Battle
       </h1>
 
+      <!-- room status -->
       <section class="nes-container with-title mt-5">
         <h3 class="title">Rooms</h3>
         <div class='rooms row'></div>
       </section>
 
+      <!-- refresh button -->
       <div class='text-center mt-3'>
-        <button type="button" class="nes-btn is-primary w-100">Refresh</button>
+        <button type="button" class="btn-refresh nes-btn is-primary w-100">Refresh</button>
       </div>
 
     </div> <!-- /container -->
@@ -37,23 +41,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
     <!-- SCRIPT: app -->
-    <script>
-      // TODO test only
-      $('body').on('click', '.nes-container .col-4 button', _ => location.href = './play.html');
-
-      // query room status (1-9)
-      $('.rooms').html('');
-      let reqs = $.map(new Array(9), (_, i) => {
-        let url = `./db/api.php?filename=room${i+1}.json`;
-        return $.ajax(url);
-      });
-      Promise.all(reqs).then(resps => {
-        resps.forEach((r, i) => {
-          console.log(r); // TODO render html from result
-          $('.rooms').append(`<div class='col-4 mt-2'><button type="button" class="nes-btn is-primary w-100">${i+1}</button></div>`);
-        });
-      });
-    </script>
+    <script src='./common.js'></script>
+    <script src='./index.js'></script>
 
   </body>
 </html>

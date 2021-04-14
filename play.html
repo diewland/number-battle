@@ -9,24 +9,24 @@
   <body>
 
     <!-- top -->
-    <div class='fixed-top p-3 bg-white container'>
+    <div class='fixed-top p-2 bg-white container' style='border-bottom: 3px solid black;'>
       <div class='row'>
-        <div class='col'>Player 1</div>
-        <div class='col text-end'>Room 1</div>
+        <div class='col label-player'>Player 0</div>
+        <div class='col label-room text-end'>Room 0</div>
       </div>
     </div>
 
     <!-- middle -->
-    <div class='record container' style='margin-top: 60px; margin-bottom: 90px;'></div>
+    <div class='record container' style='margin-top: 50px; margin-bottom: 85px;'></div>
 
     <!-- bottom -->
-    <div class='fixed-bottom bg-white p-3 container'>
+    <div class='fixed-bottom bg-white p-2 container' style="border-top: 3px solid black;">
       <div class='row'>
-        <div class='col-7'>
-          <input type="number" class="nes-input" placeholder="Input" maxlength="4" />
+        <div class='col'>
+          <input type="number" class="input-num nes-input w-100" placeholder="Input" maxlength="4" />
         </div>
-        <div class='col-5'>
-          <button type="button" class="nes-btn is-primary w-100">Send</button>
+        <div class='col'>
+          <button type="button" class="btn-send nes-btn is-primary w-100">Send</button>
         </div>
       </div>
     </div>
@@ -40,21 +40,11 @@
     <link href="https://unpkg.com/nes.css/css/nes.css" rel="stylesheet" />
 
     <!-- SCRIPT: jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
     <!-- SCRIPT: app -->
-    <!-- TODO ...
-    <link href="./app.css" rel="stylesheet" />
-    <script src="./app.js"></script>
-    -->
-    <script>
-      for(let i=1; i<=40; i++) {
-        $('.record.container').prepend(`
-          <div class='row'><div class='col'>#${i}</div><div class='col'>1234</div><div class='col'>OOXX</div></div>
-        `);
-      }
-      $('.record.container').prepend(`<div class='text-success'>Player 2 win!</div>`);
-    </script>
+    <script src='./common.js'></script>
+    <script src='./play.js'></script>
 
   </body>
 </html>
