@@ -24,7 +24,7 @@ function get_api_url(room_no) {
 function ajax_get(api, callback) {
   $.ajax(api, { success: callback });
 }
-function ajax_post(api, data, callback=(_ => {})) {
+function ajax_post(api, data, callback=null) {
   $.ajax({
     type: "POST",
     url: api,
