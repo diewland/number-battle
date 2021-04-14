@@ -4,7 +4,7 @@
 let api = null;
 let room_data = null;
 let room_no = get_qs('r');
-let player_no = 0;
+let player_no = get_qs('p'); // (optional) for dev
 
 // validate room no
 if (!room_no) {
@@ -38,10 +38,10 @@ function join_room(api) {
 
     // update online player
     room_data.online += 1;
-    player_no = room_data.online;
+    player_no = player_no || room_data.online;
 
     // reject if room full
-    if (room_data.online > 2) {
+    if (player_no > 2) {
       location.href = './index.html';
       return;
     }
