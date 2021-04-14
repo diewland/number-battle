@@ -12,7 +12,7 @@ function get_default_data() {
   return {
     online: 0,
     finish: false,
-    answer: [],
+    answer: [null, null],
     number: [[], []],
     ts: now(),
   };

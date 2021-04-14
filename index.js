@@ -1,3 +1,4 @@
+const MAX_ROOM_NUM = 9;
 const RESET_ROOM_SEC = 10 * 60; // 10 minutes
 
 // ---------- MAIN ----------
@@ -8,8 +9,9 @@ $('.btn-refresh').click(update_room_status);
 // bind busy room
 $('body').on('click', '.rooms .nes-btn.is-error', evt => {
   let room_no = $(evt.target).text();
-  let ok = confirm(`Room ${room_no} busy, Do you want to reset ?`);
-  if (ok) empty_room(room_no, update_room_status);
+  //let ok = confirm(`Room ${room_no} busy, Do you want to reset ?`);
+  //if (ok) empty_room(room_no, update_room_status);
+  alert(`Room ${room_no} busy. This room will be free within 10 minutes.`);
 });
 
 // ---------- FUNCTIONS ----------
@@ -24,7 +26,7 @@ function update_room_status() {
   $('.rooms').html('');
 
   // build requests
-  let reqs = $.map(new Array(9), (_, i) => {
+  let reqs = $.map(new Array(MAX_ROOM_NUM), (_, i) => {
     let url = get_api_url(i+1);
     return $.ajax(url);
   });
