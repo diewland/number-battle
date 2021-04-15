@@ -286,8 +286,8 @@ function set_info_msg(msg) {
 function add_log_msg(turn, num, hint) {
   let html = `
     <div class='row'>
-      <div class='col-2'>[${turn}]</div>
-      <div class='col-4'>${num}</div>
+      <div class='col-3'>[${turn}]</div>
+      <div class='col-3'>${num}</div>
       <div class='col-6'>${hint}</div>
     </div>`;
   add_html_msg(html);
