@@ -1,6 +1,6 @@
 const POLLING_SEC = 5 * 1000; // 5 seconds
 
-const MSG_ENTER_ANS = "Enter SECRET 4 digit number.";
+const MSG_ENTER_ANS = "Enter SECRET unique 4 digit number.";
 const MSG_SECRET_ADDED = "SECRET added, Please wait to start game.";
 const MSG_GAME_START = "GAME START!";
 const MSG_YOU_WIN = "YOU WIN!";
@@ -43,7 +43,8 @@ else {
 
 // input
 function validate_number(num) {
-  return !!num.match(/^\d{4}$/);
+  return !!num.match(/^\d{4}$/) &&    // 4 digit number
+         !(/([0-9]).*?\1/).test(num); // not duplicate
 }
 function handle_input(evt) {
   let $input = $(evt.target);
