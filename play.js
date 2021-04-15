@@ -3,6 +3,10 @@ const POLLING_SEC = 5 * 1000; // 5 seconds
 const MSG_ENTER_ANS = "Enter SECRET 4 digit number.";
 const MSG_ANS_ADDED = "SECRET added, Please wait to start game.";
 
+const HINT_FULL = "O"; //"<img height='24' src='./img/heart_full.png'> ";
+const HINT_HALF = "X"; //"<img height='24' src='./img/heart_half.png'> ";
+const HINT_NONE = "-"; //"<img height='24' src='./img/heart_blank.png'> ";
+
 // ---------- MAIN ----------
 
 // game config
@@ -66,7 +70,7 @@ function handle_send(evt) {
   // (2) guess friend number
   else {
     let turn = get_player_number().length;
-    let hint = 'OOOO'; // TODO
+    let hint = create_hint(get_friend_answer(), num);
     add_log_msg(turn+1, num, hint);
     set_player_number(num);
     sync_room_data(polling);
@@ -130,14 +134,23 @@ function join_room() {
     $('.label-player').html(`Player ${player_no}`);
     $('.label-room').html(`Room ${room_no}`);
 
-    // check player answer
+    // (1) enter secret
     let answer = get_player_answer();
     if (!answer) {
       set_info_msg(MSG_ENTER_ANS);
       your_turn();
     }
+    // (2) continue play
     else {
+      // start msg
       set_info_msg(MSG_ANS_ADDED);
+      // restore log
+      let friend_ans = get_friend_answer();
+      get_player_number().forEach((num, turn) => {
+        let hint = create_hint(get_friend_answer(), num);
+        add_log_msg(turn+1, num, hint);
+      });
+      // flow
       setTimeout(polling, POLLING_SEC);
       friend_turn();
     }
@@ -197,6 +210,45 @@ function is_your_turn() {
 }
 function is_game_over() {
   return false; // TODO
+}
+function create_hint(ans, num) {
+  // prepare data
+  let pad_ans = String(ans).padStart(4, '0');
+  let pad_num = String(num).padStart(4, '0');
+  let left_ans = [];
+  let left_num = [];
+
+  // find match
+  let count_match = 0;
+  for (let i=0; i<pad_ans.length; i++) {
+    let a = pad_ans[i];
+    let n = pad_num[i];
+    if (a == n) {
+      count_match += 1;
+    }
+    else {
+      left_ans.push(a);
+      left_num.push(n);
+    }
+  }
+
+  // find found
+  let count_found = 0;
+  left_num.forEach(n => {
+    let idx = left_ans.indexOf(n);
+    if (idx > -1) {
+      count_found += 1;
+      left_ans.splice(idx, 1);
+    }
+  });
+
+  // else dash
+  let count_else = 4 - count_match - count_found;
+
+  // return
+  return HINT_FULL.repeat(count_match)
+         + HINT_HALF.repeat(count_found)
+         + HINT_NONE.repeat(count_else);
 }
 
 // message
