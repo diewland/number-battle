@@ -1,11 +1,15 @@
 const POLLING_SEC = 5 * 1000; // 5 seconds
 
 const MSG_ENTER_ANS = "Enter SECRET 4 digit number.";
-const MSG_ANS_ADDED = "SECRET added, Please wait to start game.";
+const MSG_SECRET_ADDED = "SECRET added, Please wait to start game.";
+const MSG_GAME_START = "GAME START!";
 
-const HINT_FULL = "O"; //"<img height='24' src='./img/heart_full.png'> ";
-const HINT_HALF = "X"; //"<img height='24' src='./img/heart_half.png'> ";
-const HINT_NONE = "-"; //"<img height='24' src='./img/heart_blank.png'> ";
+//const HINT_FULL = "O";
+//const HINT_HALF = "X";
+//const HINT_NONE = "-";
+const HINT_FULL = "<img class='mx-1' height='24' src='./img/heart_full.png'>";
+const HINT_HALF = "<img class='mx-1' height='24' src='./img/heart_half.png'>";
+const HINT_NONE = "<img class='mx-1' height='24' src='./img/heart_blank.png'>";
 
 // ---------- MAIN ----------
 
@@ -64,7 +68,7 @@ function handle_send(evt) {
   // (1) input player answer
   let answer = get_player_answer();
   if (!answer) {
-    set_info_msg(MSG_ANS_ADDED);
+    set_info_msg(MSG_SECRET_ADDED);
     set_player_answer(num, _ => sync_room_data(polling));
   }
   // (2) guess friend number
@@ -143,7 +147,10 @@ function join_room() {
     // (2) continue play
     else {
       // start msg
-      set_info_msg(MSG_ANS_ADDED);
+      set_info_msg(MSG_SECRET_ADDED);
+      // start message
+      if (ready2play())
+        add_success_msg(MSG_GAME_START);
       // restore log
       let friend_ans = get_friend_answer();
       get_player_number().forEach((num, turn) => {
@@ -159,12 +166,15 @@ function join_room() {
 function polling() {
   fetch_room_data(_ => {
     // both players enter their number
-    let ready2play = room_data.answer.every(r => !!r);
-    if (!ready2play) {
+    if (!ready2play()) {
       setTimeout(polling, POLLING_SEC);
     }
     // ready to play
     else {
+      // just start
+      if (just_start())
+        add_success_msg(MSG_GAME_START);
+
       // game over
       if (is_game_over()) {
         // TODO show game over ui
@@ -179,6 +189,17 @@ function polling() {
       }
     }
   });
+}
+function ready2play() {
+  return room_data.answer.every(r => !!r);
+}
+function just_start() {
+  let latest_msg = $('.record.container div').first().text();
+  let p1_size = room_data.number[0].length;
+  let p2_size = room_data.number[1].length;
+  return ready2play()
+    && (p1_size + p2_size == 0)
+    && (latest_msg == MSG_SECRET_ADDED);
 }
 function your_turn() {
   $('.btn-send').show();
@@ -265,9 +286,9 @@ function set_info_msg(msg) {
 function add_log_msg(turn, num, hint) {
   let html = `
     <div class='row'>
-      <div class='col'>#${turn}</div>
-      <div class='col'>${num}</div>
-      <div class='col'>${hint}</div>
+      <div class='col-2'>[${turn}]</div>
+      <div class='col-4'>${num}</div>
+      <div class='col-6'>${hint}</div>
     </div>`;
   add_html_msg(html);
 }
