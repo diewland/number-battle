@@ -1,7 +1,7 @@
 const POLLING_SEC = 5 * 1000; // 5 seconds
 
-const MSG_ENTER_ANS = "Enter your number.";
-const MSG_ANS_ADDED = "Your number added, Please wait to start game.";
+const MSG_ENTER_ANS = "Enter SECRET 4 digit number.";
+const MSG_ANS_ADDED = "SECRET added, Please wait to start game.";
 
 // ---------- MAIN ----------
 
@@ -57,13 +57,13 @@ function handle_send(evt) {
   // remove value from input
   $input.val('');
 
-  // input player answer
+  // (1) input player answer
   let answer = get_player_answer();
   if (!answer) {
     set_info_msg(MSG_ANS_ADDED);
     set_player_answer(num, _ => sync_room_data(polling));
   }
-  // guess friend number
+  // (2) guess friend number
   else {
     let turn = get_player_number().length;
     let hint = 'OOOO'; // TODO
