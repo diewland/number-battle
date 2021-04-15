@@ -3,6 +3,9 @@ const POLLING_SEC = 5 * 1000; // 5 seconds
 const MSG_ENTER_ANS = "Enter SECRET 4 digit number.";
 const MSG_SECRET_ADDED = "SECRET added, Please wait to start game.";
 const MSG_GAME_START = "GAME START!";
+const MSG_YOU_WIN = "YOU WIN!";
+const MSG_YOU_LOSE = "YOU LOSE!";
+const MSG_DRAW_GAME = "DRAW!";
 
 //const HINT_FULL = "O";
 //const HINT_HALF = "X";
@@ -33,6 +36,7 @@ else {
   // handle inputs
   $('body').on('keyup', '.input-num', handle_input);
   $('body').on('click', '.btn-send', handle_send);
+  $('body').on('click', '.btn-exit', handle_exit);
 }
 
 // ---------- FUNCTIONS ----------
@@ -82,6 +86,12 @@ function handle_send(evt) {
 
   // switch to friend turn
   friend_turn();
+}
+function handle_exit(evt) {
+  // empty room
+  ajax_post(api, null, _ => {
+    location.href = './index.html';
+  });
 }
 
 // api
@@ -176,11 +186,11 @@ function polling() {
         add_success_msg(MSG_GAME_START);
 
       // game over
-      if (is_game_over()) {
-        // TODO show game over ui
+      if (check_game_over()) {
+        game_over();
       }
       // your turn
-      else if (is_your_turn()) {
+      else if (check_your_turn()) {
         your_turn();
       }
       // friend turn -> polling
@@ -214,11 +224,21 @@ function friend_turn() {
   $('.btn-exit').hide();
 }
 function game_over() {
+  // show message
+  let wins = check_win_status();
+  if (wins.every(r => r)) { // draw
+    add_success_msg(MSG_DRAW_GAME);
+  }
+  else { // win or lose
+    let win = wins[player_no-1];
+    win ? add_success_msg(MSG_YOU_WIN)
+        : add_error_msg(MSG_YOU_LOSE);
+  }
   $('.btn-send').hide();
   $('.btn-wait').hide();
   $('.btn-exit').show();
 }
-function is_your_turn() {
+function check_your_turn() {
   let p1_size = room_data.number[0].length;
   let p2_size = room_data.number[1].length;
   if (player_no == 1) {
@@ -229,8 +249,20 @@ function is_your_turn() {
   }
   return false;
 }
-function is_game_over() {
-  return false; // TODO
+function check_win_status() {
+  let [p1_ans, p2_ans] = room_data.answer;
+  let [p1_num, p2_num] = room_data.number;
+
+  // turn not complete
+  if (p1_num.length != p2_num.length)
+    return [false, false];
+
+  let p1_win = p1_num.indexOf(p2_ans) > -1;
+  let p2_win = p2_num.indexOf(p1_ans) > -1;
+  return [ p1_win, p2_win ];
+}
+function check_game_over() {
+  return check_win_status().some(s => s);
 }
 function create_hint(ans, num) {
   // prepare data
