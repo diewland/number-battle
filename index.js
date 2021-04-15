@@ -47,18 +47,23 @@ function render_room_button(no, resp) {
   }
   // 1 player in room
   else if (data.online == 1) {
-    return `<div class='col-4 mt-2'><a class="nes-btn is-warning w-100" href='./play.html?r=${no}'>${no}</a></div>`;
+    return apply_auto_empty_room(no, data,
+      `<div class='col-4 mt-2'><a class="nes-btn is-warning w-100" href='./play.html?r=${no}'>${no}</a></div>`);
   }
   // room busy
   else {
-    let last_active = (now() - data.ts) / 1000; // seconds
-    // auto empty room
-    if (last_active > RESET_ROOM_SEC) {
-      empty_room(no);
-      return `<div class='col-4 mt-2'><a class="nes-btn is-success w-100" href='./play.html?r=${no}'>${no}</a></div>`;
-    }
-    else {
-      return `<div class='col-4 mt-2'><a class="nes-btn is-error w-100" href='#/'>${no}</a></div>`;
-    }
+    return apply_auto_empty_room(no, data,
+      `<div class='col-4 mt-2'><a class="nes-btn is-error w-100" href='#/'>${no}</a></div>`);
+  }
+}
+function apply_auto_empty_room(no, data, html) {
+  let last_active = (now() - data.ts) / 1000; // seconds
+  // auto empty room
+  if (last_active > RESET_ROOM_SEC) {
+    empty_room(no);
+    return `<div class='col-4 mt-2'><a class="nes-btn is-success w-100" href='./play.html?r=${no}'>${no}</a></div>`;
+  }
+  else {
+    return html;
   }
 }
