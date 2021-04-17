@@ -1,8 +1,9 @@
 const POLLING_SEC = 5 * 1000; // 5 seconds
 
 const MSG_ENTER_ANS = "Enter SECRET unique 4 digit number.";
-const MSG_SECRET_ADDED = "SECRET added, Please wait to start game.";
-const MSG_GAME_START = "GAME START!";
+const MSG_SECRET_ADDED = "SECRET added, Please wait..";
+const MSG_YOUR_TURN = "YOUR TURN!";
+const MSG_PLZ_WAIT = "Please wait..";
 const MSG_YOU_WIN = "YOU WIN!";
 const MSG_YOU_LOSE = "YOU LOSE!";
 const MSG_DRAW_GAME = "DRAW!";
@@ -159,9 +160,6 @@ function join_room() {
     else {
       // start msg
       set_info_msg(MSG_SECRET_ADDED);
-      // start message
-      if (ready2play())
-        add_success_msg(MSG_GAME_START);
       // restore log
       let friend_ans = get_friend_answer();
       get_player_number().forEach((num, turn) => {
@@ -182,10 +180,6 @@ function polling() {
     }
     // ready to play
     else {
-      // just start
-      if (just_start())
-        add_success_msg(MSG_GAME_START);
-
       // game over
       if (check_game_over()) {
         game_over();
@@ -204,22 +198,20 @@ function polling() {
 function ready2play() {
   return room_data.answer.every(r => !!r);
 }
-function just_start() {
-  let latest_msg = $('.record.container div').first().text();
-  let p1_size = room_data.number[0].length;
-  let p2_size = room_data.number[1].length;
-  return ready2play()
-    && (p1_size + p2_size == 0)
-    && (latest_msg == MSG_SECRET_ADDED);
-}
 function your_turn() {
+  if (ready2play())
+    add_html_msg(MSG_YOUR_TURN);
+
   $('.btn-send').show();
   $('.btn-wait').hide();
   $('.btn-exit').hide();
-  //
+
   $('.input-num').focus();
 }
 function friend_turn() {
+  if (ready2play())
+    add_html_msg(MSG_PLZ_WAIT);
+
   $('.btn-send').hide();
   $('.btn-wait').show();
   $('.btn-exit').hide();
@@ -306,16 +298,12 @@ function create_hint(ans, num) {
 }
 
 // message
-function clear_msg() { $('.record.container').html(''); }
 function add_msg(html) { $('.record.container').prepend(html); }
-function add_html_msg(msg, clz=null) { add_msg(`<div class='text-${clz}'>${msg}</div>`); }
+function add_html_msg(msg, clz=null) { mario_say(msg, clz); }
 function add_success_msg(msg) { add_html_msg(msg, 'success'); }
 function add_error_msg(msg) { add_html_msg(msg, 'danger'); }
-function add_info_msg(msg) { add_html_msg(msg, 'primary'); }
-function set_info_msg(msg) {
-  clear_msg();
-  add_info_msg(msg);
-}
+function add_info_msg(msg) { add_html_msg(msg, '_primary'); }
+function set_info_msg(msg) { add_info_msg(msg); }
 function add_log_msg(turn, num, hint) {
   let html = `
     <div class='row'>
@@ -323,5 +311,8 @@ function add_log_msg(turn, num, hint) {
       <div class='col-3'>${num}</div>
       <div class='col-6'>${hint}</div>
     </div>`;
-  add_html_msg(html);
+  add_msg(html);
+}
+function mario_say(msg, clz) {
+  $('.msg-mario').html(`<span class='text-${clz}'>${msg}</span>`);
 }

@@ -17,17 +17,23 @@
     </div>
 
     <!-- middle -->
-    <div class='record container' style='margin-top: 50px; margin-bottom: 85px;'></div>
+    <div class='record container' style='margin-top: 50px; margin-bottom: 185px;'></div>
 
     <!-- bottom -->
     <div class='fixed-bottom bg-white p-2 container' style="border-top: 3px solid black;">
+      <div class='row'>
+        <div class='col'>
+          <i class="nes-mario" style='float: left; margin: 0 10px 10px 0;'></i>
+          <span class='msg-mario'></span>
+        </div>
+      </div>
       <div class='row'>
         <div class='col'>
           <input type="number" class="input-num nes-input w-100" placeholder="Input" maxlength="4" />
         </div>
         <div class='col'>
           <button type="button" class="btn-send nes-btn is-primary w-100" style='display: none;'>Send</button>
-          <button type="button" class="btn-wait nes-btn is-warning w-100">Wait</button>
+          <button type="button" class="btn-wait nes-btn is-disabled w-100">Send</button>
           <button type="button" class="btn-exit nes-btn is-primary w-100" style='display: none;'>Exit</button>
         </div>
       </div>
